@@ -155,6 +155,52 @@ void shortestPathsFrom(int start) {
     }
 }
 
+void minimumSpanningTree() {
+    vector<bool> inMST(SIZE, false);
+    priority_queue<Pair, vector<Pair>, greater<Pair>> pq;
+
+    // (weight, node, parent)
+    vector<int> parent(SIZE, -1);
+    vector<int> key(SIZE, INT_MAX);
+
+    key[0] = 0;
+    pq.push({0, 0});
+
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+
+        if (inMST[u]) continue;
+        inMST[u] = true;
+
+        // Look at all neighbors of u
+        for (auto &edge : adjList[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+
+            if (!inMST[v] && weight < key[v]) {
+                key[v] = weight;
+                pq.push({key[v], v});
+                parent[v] = u;
+            }
+        }
+    }
+
+    cout << "\nMinimum Spanning Tree (MST):\n";
+    cout << "--------------------------------------\n";
+
+    for (int i = 1; i < SIZE; i++) {
+        if (parent[i] != -1) {
+            cout << airportNames[parent[i]] << " → "
+                 << airportNames[i] << "  ("
+                 << key[i] << " mins)\n";
+        }
+    }
+
+    cout << endl;
+}
+
+
 };
 
 int main() {
@@ -177,5 +223,7 @@ int main() {
     g.BFS(0);
     
     g.shortestPathsFrom(0);
+    g.minimumSpanningTree();
+
 
 }
