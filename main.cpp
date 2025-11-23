@@ -203,6 +203,17 @@ void minimumSpanningTree() {
 
 };
 
+void printMenu() {
+    cout << "Airline Network Menu:\n";
+    cout << "[1] Display airline routes\n";
+    cout << "[2] Check reachable airports (BFS)\n";
+    cout << "[3] Run inspection route (DFS)\n";
+    cout << "[4] Shortest travel times\n";
+    cout << "[5]. Minimum Spanning Tree\n";
+    cout << "[0] Exit\n";
+    cout << "Enter your choice: ";
+}
+
 int main() {
     vector<Edge> edges = {
     {0,1,8}, {0,2,21},
@@ -216,14 +227,39 @@ int main() {
 
     Graph g(edges);
 
-    g.printGraph();
-    cout << endl;
+    int choice;
 
-    g.DFS(0);
-    g.BFS(0);
-    
-    g.shortestPathsFrom(0);
-    g.minimumSpanningTree();
+    do {
+        printMenu();
+        cin >> choice;
+        cout << endl;
 
+        switch (choice) {
+            case 1:
+                g.printGraph();
+                break;
+            case 2:
+                g.BFS(0);
+                break;
+            case 3:
+                g.DFS(0);
+                break;
+            case 4:
+                g.shortestPathsFrom(0);
+                break;
+            case 5:
+                g.minimumSpanningTree();
+                break;
+            case 0:
+                cout << "Exiting program.\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+                break;
+        }
 
+        cout << endl;
+    } while (choice != 0);
+
+    return 0;
 }
