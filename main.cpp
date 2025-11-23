@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <limits.h>
 using namespace std;
 
 const int SIZE = 11;
@@ -114,6 +115,46 @@ void DFS(int start) {
         cout << endl;
     }
 }
+void shortestPathsFrom(int start) {
+    vector<int> dist(SIZE, INT_MAX);
+    dist[start] = 0;
+
+    // min-heap storing (distance, node)
+    priority_queue<Pair, vector<Pair>, greater<Pair>> pq;
+    pq.push({0, start});
+
+    while (!pq.empty()) {
+        auto [currentDist, u] = pq.top();
+        pq.pop();
+
+        if (currentDist > dist[u]) continue;
+
+        for (auto &edge : adjList[u]) {
+            int v = edge.first;
+            int weight = edge.second;
+
+            if (dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+
+    cout << "\nShortest Flight Times from "
+         << airportNames[start] << ":\n";
+    cout << "--------------------------------------\n";
+
+    for (int i = 0; i < SIZE; i++) {
+        cout << airportNames[start] << " → "
+             << airportNames[i] << " : ";
+
+        if (dist[i] == INT_MAX)
+            cout << "unreachable\n";
+        else
+            cout << dist[i] << " mins\n";
+    }
+}
+
 };
 
 int main() {
@@ -134,5 +175,7 @@ int main() {
 
     g.DFS(0);
     g.BFS(0);
-    return 0;
+    
+    g.shortestPathsFrom(0);
+
 }
