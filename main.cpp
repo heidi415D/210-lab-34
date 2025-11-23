@@ -5,6 +5,21 @@ using namespace std;
 
 const int SIZE = 11;
 
+vector<string> airportNames = {
+    "San Francisco International (SFO)",
+    "Seattle-Tacoma Airport (SEA)",
+    "Denver International (DEN)",
+    "Phoenix Sky Harbor (PHX)",
+    "Salt Lake City Airport (SLC)",
+    "Dallas Fort-Worth (DFW)",
+    "Chicago O'Hare (ORD)",
+    "Atlanta Hartsfield-Jackson (ATL)",
+    "Miami International (MIA)",
+    "Honolulu International (HNL)",
+    "Anchorage Airport (ANC)"
+};
+
+
 struct Edge {
     int src, dest, weight;
 };
@@ -28,61 +43,77 @@ public:
         }
     }
 
-    void printGraph() {
-        cout << "Graph's adjacency list:" << endl;
-        for (int i = 0; i < adjList.size(); i++) {
-            cout << i << " --> ";
-            for (Pair v : adjList[i])
-                cout << "(" << v.first << ", " << v.second << ") ";
-            cout << endl;
+   void printGraph() {
+    cout << "Airline Route Network:\n";
+    cout << "=======================\n";
+
+    for (int i = 0; i < adjList.size(); i++) {
+        cout << airportNames[i] << " has direct flights to:\n";
+        for (Pair v : adjList[i]) {
+            cout << "  → " << airportNames[v.first]
+                 << " (Flight Time: " << v.second << " mins)\n";
+        }
+        cout << endl;
+    }
+}
+
+    
+
+    void dfsUtil(int v, vector<bool> &visited) {
+    visited[v] = true;
+
+    cout << "Inspecting " << airportNames[v] << endl;
+
+    for (auto &edge : adjList[v]) {
+        int neighbor = edge.first;
+        if (!visited[neighbor]) {
+            cout << "  → Traveling to " << airportNames[neighbor]
+                 << " (" << edge.second << " mins)\n";
+            dfsUtil(neighbor, visited);
         }
     }
+}
 
-    // DFS helper
-    void dfsUtil(int v, vector<bool> &visited) {
-        visited[v] = true;
-        cout << v << " ";
+void DFS(int start) {
+    vector<bool> visited(SIZE, false);
+    cout << "Airline Maintenance Inspection Route (DFS)\n";
+    cout << "Starting at: " << airportNames[start] << "\n";
+    cout << "-------------------------------------------\n";
+    dfsUtil(start, visited);
+    cout << endl;
+}
+
+
+   void BFS(int start) {
+    vector<bool> visited(SIZE, false);
+    queue<int> q;
+
+    visited[start] = true;
+    q.push(start);
+
+    cout << "Checking reachable airports (BFS)\n";
+    cout << "Starting at: " << airportNames[start] << "\n";
+    cout << "-------------------------------------------\n";
+
+    while (!q.empty()) {
+        int v = q.front();
+        q.pop();
+
+        cout << "Now checking: " << airportNames[v] << endl;
 
         for (auto &edge : adjList[v]) {
             int neighbor = edge.first;
-            if (!visited[neighbor])
-                dfsUtil(neighbor, visited);
-        }
-    }
-
-    // Public DFS
-    void DFS(int start) {
-        vector<bool> visited(SIZE, false);
-        cout << "DFS starting from vertex " << start << ":\n";
-        dfsUtil(start, visited);
-        cout << endl;
-    }
-
-    // BFS
-    void BFS(int start) {
-        vector<bool> visited(SIZE, false);
-        queue<int> q;
-
-        visited[start] = true;
-        q.push(start);
-
-        cout << "BFS starting from vertex " << start << ":\n";
-
-        while (!q.empty()) {
-            int v = q.front();
-            q.pop();
-            cout << v << " ";
-
-            for (auto &edge : adjList[v]) {
-                int neighbor = edge.first;
-                if (!visited[neighbor]) {
-                    visited[neighbor] = true;
-                    q.push(neighbor);
-                }
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                cout << "  → Adding connecting flight to "
+                     << airportNames[neighbor]
+                     << " (" << edge.second << " mins)\n";
+                q.push(neighbor);
             }
         }
         cout << endl;
     }
+}
 };
 
 int main() {
