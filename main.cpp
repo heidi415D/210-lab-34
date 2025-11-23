@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+const int SIZE = 7;
+
+struct Edge {
+    int src, dest, weight;
+};
+
+typedef pair<int, int> Pair;
+
+class Graph {
+public:
+    vector<vector<Pair>> adjList;
+
+    Graph(vector<Edge> const &edges) {
+        adjList.resize(SIZE);
+
+        for (auto &edge : edges) {
+            int src = edge.src;
+            int dest = edge.dest;
+            int weight = edge.weight;
+
+            adjList[src].push_back(make_pair(dest, weight));
+            adjList[dest].push_back(make_pair(src, weight));
+        }
+    }
+
+    void printGraph() {
+        cout << "Graph's adjacency list:" << endl;
+        for (int i = 0; i < adjList.size(); i++) {
+            cout << i << " --> ";
+            for (Pair v : adjList[i])
+                cout << "(" << v.first << ", " << v.second << ") ";
+            cout << endl;
+        }
+    }
+
+    // DFS helper
+    void dfsUtil(int v, vector<bool> &visited) {
+        visited[v] = true;
+        cout << v << " ";
+
+        for (auto &edge : adjList[v]) {
+            int neighbor = edge.first;
+            if (!visited[neighbor])
+                dfsUtil(neighbor, visited);
+        }
+    }
+
+    // Public DFS
+    void DFS(int start) {
+        vector<bool> visited(SIZE, false);
+        cout << "DFS starting from vertex " << start << ":\n";
+        dfsUtil(start, visited);
+        cout << endl;
+    }
+
+    // BFS
+    void BFS(int start) {
+        vector<bool> visited(SIZE, false);
+        queue<int> q;
+
+        visited[start] = true;
+        q.push(start);
+
+        cout << "BFS starting from vertex " << start << ":\n";
+
+        while (!q.empty()) {
+            int v = q.front();
+            q.pop();
+            cout << v << " ";
+
+            for (auto &edge : adjList[v]) {
+                int neighbor = edge.first;
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    q.push(neighbor);
+                }
+            }
+        }
+        cout << endl;
+    }
+};
+
