@@ -1,0 +1,20 @@
+Step 1 Prompt: This is my module’s starter graph code modify it by adding DFS and BFS functions inside the graph class.
+
+Step 2 Prompt: N/A
+
+Step 3 Initial Prompt: this is my C++ graph code. Can you turn it into some kind of real-world application? Maybe make the graph represent something like airports or something, and just adjust the output so it prints nicer. You can change the printGraph function and the DFS.
+
+Step 3 Updated Prompt: This is my C++ graph program. I need to wrap a real-world airline application around this graph.
+please do the following without changing the structure of my graph class the edges or the DFS/BFS algorithms:
+ add a list of airport names for each node.
+ modify printGraph() so it prints airport to airport connections and flight durations
+ modify DFS so it describes an airline inspection route starting at the chosen airport
+for the BFS part change the print statements so it sounds like we’re checking which airports can be reached by taking connecting flights
+
+Step 4 prompt: Now I need to add a feature that gives the shortest travel times from airport 0 to all the other airports in my graph. add a new function inside the graph class that calculates the shortest routes based on the flight time weights already in the adjaclist.
+the function should print something like shortest time from sfo to miami is x minutes.
+keep all my existing DFS/BFS code the same.
+
+Step 5 prompt: Now I need to add another feature I want my graph program to print out a minimum spanning tree using the flight times in the graph. please add a new function inside the graph class that finds a set of edges that connects all the airports with the minimum total flight time.make the function print the connections in a readable way like: SFO to SEA (8 mins) please don’t change my existing DFS/BFS/shortest path code just add the new MST function and show me where to call it in main.
+
+Step 6 prompt: N/A
